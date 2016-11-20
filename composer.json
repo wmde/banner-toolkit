@@ -8,6 +8,7 @@
             "email": "gabriel.birke@wikimedia.de"
         }
     ],
+    "bin": [ "bin/banner_workflow" ],
     "autoload": {
         "psr-4": {
             "WMDE\\Fundraising\\BannerWorkflow\\": "src/"
@@ -29,5 +30,10 @@
             "@cs"
         ],
         "cs": "vendor/bin/phpcs src/ tests/ --standard=phpcs.xml --extensions=php -sp"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0.x-dev"
+        }
     }
 }
