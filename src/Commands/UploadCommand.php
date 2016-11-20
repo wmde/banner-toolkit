@@ -5,11 +5,14 @@ namespace WMDE\Fundraising\BannerWorkflow\Commands;
 use Mediawiki\Api\ApiUser;
 use Mediawiki\Api\MediawikiApi;
 use Mediawiki\Api\MediawikiFactory;
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
+use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use WMDE\Fundraising\BannerWorkflow\CliConfiguration;
 use WMDE\Fundraising\BannerWorkflow\FileToPageNameTranslator;
 use WMDE\Fundraising\BannerWorkflow\PageUpload\PageUploadRequest;
 use WMDE\Fundraising\BannerWorkflow\PageUpload\PageUploadResponse;
@@ -35,8 +38,15 @@ class UploadCommand extends Command
 
 	protected function execute( InputInterface $input, OutputInterface $output )
 	{
-		$fileToPageMapper = $this->createFileToPageMapper( $input );
-		$useCase = $this->newUseCaseFromInput( $input );
+		try {
+			$config = $this->getConfigFromInput( $input );
+		} catch ( InvalidConfigurationException $ex ) {
+			$output->writeln( '<error>' .$ex->getMessage() . '</error>' );
+			return;
+		}
+
+		$fileToPageMapper = $this->createFileToPageMapper( $config, $input->getArgument( 'test_name' ) );
+		$useCase = $this->newUseCase( $config );
 		foreach ( glob( self::FILE_GLOB ) as $file ) {
 			$this->outputResponse(
 				$useCase->uploadIfChanged( $this->getRequestFromFilename( $file, $fileToPageMapper ) ),
@@ -52,12 +62,12 @@ class UploadCommand extends Command
 		return new MediawikiFactory( $api );
 	}
 
-	private function createFileToPageMapper( InputInterface $input ): FileToPageNameTranslator
+	private function createFileToPageMapper( array $config, string $testName ): FileToPageNameTranslator
 	{
 		$context = [
-			'page_prefix' => $input->getOption( 'page_prefix' ),
-			'campaign_name' => $input->getOption( 'campaign_name' ),
-			'test_name' => $input->getArgument( 'test_name' )
+			'page_prefix' => $config['page_prefix'],
+			'campaign_name' => $config['campaign_name'],
+			'test_name' => $testName
 		];
 		return new FileToPageNameTranslator( self::FILE_PATTERN_REGEX, self::BANNER_PAGE_NAME_TEMPLATE, $context );
 	}
@@ -71,12 +81,12 @@ class UploadCommand extends Command
 		);
 	}
 
-	private function newUseCaseFromInput( InputInterface $input ): PageUploadUseCase
+	private function newUseCase( array $config ): PageUploadUseCase
 	{
 		$services = $this->newMediawikiServices(
-			$input->getOption( 'api_url' ),
-			$input->getOption( 'user' ),
-			$input->getOption( 'password' )
+			$config['api_url'],
+			$config['user'],
+			$config['password']
 		);
 		return new PageUploadUseCase( $services->newPageGetter(), $services->newRevisionSaver() );
 	}
@@ -92,6 +102,19 @@ class UploadCommand extends Command
 			return;
 		}
 		$output->writeln( '<comment>' . $response->getMessage() . '</comment>' );
+	}
+
+	private function getConfigFromInput( InputInterface $input ): array
+	{
+		$processor = new Processor();
+		$inputConfig = [
+			'api_url' => $input->getOption( 'api_url' ),
+			'user' => $input->getOption( 'user' ),
+			'password' => $input->getOption( 'password' ),
+			'page_prefix' => $input->getOption( 'page_prefix' ),
+			'campaign_name' => $input->getOption( 'campaign_name' )
+		];
+		return $processor->processConfiguration( new CliConfiguration(), [ $inputConfig ] );
 	}
 
 }
