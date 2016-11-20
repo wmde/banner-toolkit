@@ -25,9 +25,13 @@ class PageUploadUseCaseTest extends \PHPUnit_Framework_TestCase
 		$saver = $this->getMockBuilder( RevisionSaver::class )->disableOriginalConstructor()->getMock();
 		$useCase = new PageUploadUseCase( $getter, $saver );
 		$getter->method( 'getFromTitle' )
-			->willReturn( new Page( new PageIdentifier( null, -1 ) ) );
+			->willReturn( $this->newNonexistingPage() );
 
 		$this->assertFalse( $useCase->uploadIfChanged( $this->newRequest() )->isSuccess() );
+	}
+
+	private function newNonexistingPage(): Page {
+		return new Page( new PageIdentifier( null, 0 ) );
 	}
 
 	private function newRequest(): PageUploadRequest {

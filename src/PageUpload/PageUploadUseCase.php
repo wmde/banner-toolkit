@@ -22,10 +22,10 @@ class PageUploadUseCase {
 	}
 
 	public function uploadIfChanged( PageUploadRequest $request ) : PageUploadResponse {
-
 		$page = $this->pageGetter->getFromTitle( $request->getPageName() );
-		if ( $page->getPageIdentifier()->getId() == -1 ) {
-			return PageUploadResponse::newFailureResponse( 'Page does not exist' );
+
+		if ( empty ( $page->getPageIdentifier()->getId() ) ) {
+			return PageUploadResponse::newFailureResponse( sprintf( 'Page \'%s\' does not exist', $request->getPageName() ) );
 		}
 
 		$revision = $page->getRevisions()->getLatest();
