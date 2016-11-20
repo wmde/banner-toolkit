@@ -7,17 +7,19 @@ class FileToPageNameTranslator
 {
 	private $filePartRx;
 	private $pageNameTemplate;
+	private $context;
 
-	public function __construct( $filePartRx, $pageNameTemplate )
+	public function __construct( $filePartRx, $pageNameTemplate, array $context = [] )
 	{
 		$this->filePartRx = $filePartRx;
 		$this->pageNameTemplate = $pageNameTemplate;
+		$this->context = $context;
 	}
 
-	public function getPageName( string $fileName, array $additionalValues = [] ): string
+	public function getPageName( string $fileName ): string
 	{
 		preg_match( $this->filePartRx, $fileName, $matches );
-		$values = array_replace( $this->getEmptyValuesForTemplate(), $additionalValues, $matches );
+		$values = array_replace( $this->getEmptyValuesForTemplate(), $this->context, $matches );
 		return strtr( $this->pageNameTemplate, $this->getPlaceholders( $values ) );
 	}
 

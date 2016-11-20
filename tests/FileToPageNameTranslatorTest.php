@@ -22,12 +22,13 @@ class FileToPageNameTranslatorTest extends \PHPUnit_Framework_TestCase
 		$this->assertSame( 'B16WMDE_test', $translator->getPageName( 'Banner_test.html' ) );
 	}
 
-	public function testAdditionalValuesAreInsertedIntoPlaceholders() {
-		$translator = new FileToPageNameTranslator( '/^Banner(.*)\.html$/', '{{campaign}}{{1}}{{2}}{{name}}' );
-		$this->assertSame( 'B16WMDE_mobile_test_01', $translator->getPageName( 'Banner_test.html', [
+	public function testAdditionalContextValuesAreInsertedIntoPlaceholders() {
+		$context = [
 			'campaign' => 'B16WMDE_mobile',
 			'name' => '_01'
-			] ) );
+		];
+		$translator = new FileToPageNameTranslator( '/^Banner(.*)\.html$/', '{{campaign}}{{1}}{{2}}{{name}}', $context );
+		$this->assertSame( 'B16WMDE_mobile_test_01', $translator->getPageName( 'Banner_test.html' ) );
 	}
 
 }
