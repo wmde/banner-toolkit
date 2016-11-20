@@ -29,7 +29,7 @@ class PageUploadUseCase {
 		}
 
 		$revision = $page->getRevisions()->getLatest();
-		$lastModified = ( new \DateTime( $revision->getTimestamp() ) )->format( 'U' );
+		$lastModified = ( new \DateTime( $revision->getTimestamp() ) );
 		if ( $lastModified >= $request->getLastChange() ) {
 			return PageUploadResponse::newNoOpResponse( 'File is older than page' );
 		}

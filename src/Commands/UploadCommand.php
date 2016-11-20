@@ -39,7 +39,7 @@ class UploadCommand extends Command
 		$useCase = $this->newUseCaseFromInput( $input );
 		foreach ( glob( self::FILE_GLOB ) as $file ) {
 			$this->outputResponse(
-				$useCase->uploadIfChanged( $this->getRequestFromFilename( $file, $fileToPageMapper, $input ) ),
+				$useCase->uploadIfChanged( $this->getRequestFromFilename( $file, $fileToPageMapper ) ),
 				$output
 			);
 		}
@@ -62,11 +62,11 @@ class UploadCommand extends Command
 		return new FileToPageNameTranslator( self::FILE_PATTERN_REGEX, self::BANNER_PAGE_NAME_TEMPLATE, $context );
 	}
 
-	private function getRequestFromFilename( string $file, FileToPageNameTranslator $fileToPageMapper, InputInterface $input ): PageUploadRequest
+	private function getRequestFromFilename( string $file, FileToPageNameTranslator $fileToPageMapper ): PageUploadRequest
 	{
 		return new PageUploadRequest(
 			$fileToPageMapper->getPageName( $file ),
-			filemtime( $file ),
+			new \DateTime( '@' . filemtime( $file ) ),
 			file_get_contents( $file )
 		);
 	}

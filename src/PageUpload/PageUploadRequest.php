@@ -9,7 +9,7 @@ class PageUploadRequest {
 	private $lastChange;
 	private $newContent;
 
-	public function __construct( string $pageName, int $lastChange, string $newContent ) {
+	public function __construct( string $pageName, \DateTime $lastChange, string $newContent ) {
 
 		$this->pageName = $pageName;
 		$this->lastChange = $lastChange;
@@ -20,7 +20,7 @@ class PageUploadRequest {
 		return $this->pageName;
 	}
 
-	public function getLastChange() : int {
+	public function getLastChange() : \DateTime {
 
 		return $this->lastChange;
 	}
