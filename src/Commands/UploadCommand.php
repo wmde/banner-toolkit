@@ -28,12 +28,12 @@ class UploadCommand extends Command
 	{
 		$this->setName( 'upload' )
 			->setDescription( 'Upload banner files to wiki' )
-			->addOption( 'api_url', null, InputOption::VALUE_REQUIRED, 'API url', 'https://meta.wikimedia.org/w/api.php' )
+			->addOption( 'api_url', null, InputOption::VALUE_REQUIRED, 'API url, e.g. https://meta.wikimedia.org/w/api.php' )
 			->addOption( 'user', 'u', InputOption::VALUE_REQUIRED, 'User name' )
 			->addOption( 'password', 'p', InputOption::VALUE_REQUIRED, 'Password' )
 			->addOption( 'page_prefix', 'w', InputOption::VALUE_REQUIRED, 'Namespace and page prefix on wiki' )
-			->addOption( 'campaign_name', 'c', InputOption::VALUE_REQUIRED, '. This includes a campaign prefix (desktop, mobile, etc)' )
-			->addArgument( 'test_name', InputArgument::REQUIRED, 'Test name (without campaign prefix)' );
+			->addOption( 'campaign_name', 'c', InputOption::VALUE_REQUIRED, 'Campaign prefix, e.g. B16WMDE_' )
+			->addArgument( 'test_name', InputArgument::REQUIRED, 'Test name (without campaign prefix), e.g. 20_161224' );
 	}
 
 	protected function execute( InputInterface $input, OutputInterface $output )
