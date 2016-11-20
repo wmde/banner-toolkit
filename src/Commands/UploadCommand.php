@@ -2,6 +2,7 @@
 
 namespace WMDE\Fundraising\BannerWorkflow\Commands;
 
+use M1\Env\Parser;
 use Mediawiki\Api\ApiUser;
 use Mediawiki\Api\MediawikiApi;
 use Mediawiki\Api\MediawikiFactory;
@@ -33,13 +34,14 @@ class UploadCommand extends Command
 			->addOption( 'password', 'p', InputOption::VALUE_REQUIRED, 'Password' )
 			->addOption( 'page_prefix', 'w', InputOption::VALUE_REQUIRED, 'Namespace and page prefix on wiki' )
 			->addOption( 'campaign_name', 'c', InputOption::VALUE_REQUIRED, 'Campaign prefix, e.g. B16WMDE_' )
+			->addOption( 'config_file', null, InputOption::VALUE_REQUIRED, 'Config file for all options', '.campaign_config' )
 			->addArgument( 'test_name', InputArgument::REQUIRED, 'Test name (without campaign prefix), e.g. 20_161224' );
 	}
 
 	protected function execute( InputInterface $input, OutputInterface $output )
 	{
 		try {
-			$config = $this->getConfigFromInput( $input );
+			$config = $this->getConfigFromInputAndFiles( $input );
 		} catch ( InvalidConfigurationException $ex ) {
 			$output->writeln( '<error>' .$ex->getMessage() . '</error>' );
 			return;
@@ -104,17 +106,34 @@ class UploadCommand extends Command
 		$output->writeln( '<comment>' . $response->getMessage() . '</comment>' );
 	}
 
-	private function getConfigFromInput( InputInterface $input ): array
+	private function getConfigFromInputAndFiles( InputInterface $input ): array
 	{
 		$processor = new Processor();
-		$inputConfig = [
-			'api_url' => $input->getOption( 'api_url' ),
-			'user' => $input->getOption( 'user' ),
-			'password' => $input->getOption( 'password' ),
-			'page_prefix' => $input->getOption( 'page_prefix' ),
-			'campaign_name' => $input->getOption( 'campaign_name' )
-		];
-		return $processor->processConfiguration( new CliConfiguration(), [ $inputConfig ] );
+		array_filter( $configs = [
+			$this->loadConfigValues( $input->getOption( 'config_file' ) ),
+			$this->loadConfigValues( '.env' ),
+			array_filter( [
+				'api_url' => $input->getOption( 'api_url' ),
+				'user' => $input->getOption( 'user' ),
+				'password' => $input->getOption( 'password' ),
+				'page_prefix' => $input->getOption( 'page_prefix' ),
+				'campaign_name' => $input->getOption( 'campaign_name' )
+			] )
+		] );
+
+		print_r($configs);
+		return $processor->processConfiguration( new CliConfiguration(), $configs );
+	}
+
+	private function loadConfigValues( $name ): array {
+		if ( !file_exists( $name ) ) {
+			return [];
+		}
+		$values = [];
+		foreach( Parser::parse( file_get_contents( $name ) ) as $k => $v ) {
+			$values[strtolower($k)] = $v;
+		}
+		return $values;
 	}
 
 }
