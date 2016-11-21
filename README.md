@@ -34,7 +34,7 @@ Call the command like this (changing the placeholders):
   
     banner_workflow upload <TEST_NAME>
     
-The command will then look for HTML files matching the `Banner_<VARIANT>.html` pattern and copy the file contents to the corresponding page (putting toghether the page name from the configuration, the test name and the variant parts in the file names).
+The command will then look for HTML files matching the `Banner_<VARIANT>.html` pattern and copy the file contents to the corresponding page. The command figures out the page name by combining the page prefix and campaign name from the configuration, the test name and the variant parts in the file names.
 
 ## Why use this tool instead of CentralNotice editor?
 
