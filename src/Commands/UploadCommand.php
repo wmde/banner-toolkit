@@ -121,7 +121,6 @@ class UploadCommand extends Command
 			] )
 		] );
 
-		print_r($configs);
 		return $processor->processConfiguration( new CliConfiguration(), $configs );
 	}
 
