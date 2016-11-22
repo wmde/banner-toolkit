@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\BannerWorkflow\PageUpload;
+namespace WMDE\Fundraising\BannerToolkit\PageUpload;
 
 class PageUploadResponse {
 

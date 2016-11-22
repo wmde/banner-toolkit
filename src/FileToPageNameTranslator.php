@@ -1,7 +1,7 @@
 <?php
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\BannerWorkflow;
+namespace WMDE\Fundraising\BannerToolkit;
 
 class FileToPageNameTranslator
 {

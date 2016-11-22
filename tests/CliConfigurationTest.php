@@ -1,11 +1,11 @@
 <?php
+declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\BannerWorkflow\Test;
-
+namespace WMDE\Fundraising\BannerToolkit\Test;
 
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\Definition\Processor;
-use WMDE\Fundraising\BannerWorkflow\CliConfiguration;
+use WMDE\Fundraising\BannerToolkit\CliConfiguration;
 
 class CliConfigurationTest extends \PHPUnit_Framework_TestCase
 {

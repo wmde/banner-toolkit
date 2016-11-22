@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\BannerWorkflow\PageUpload;
+namespace WMDE\Fundraising\BannerToolkit\PageUpload;
 
 use Mediawiki\Api\Service\PageGetter;
 use Mediawiki\Api\Service\RevisionSaver;

@@ -1,6 +1,7 @@
 <?php
+declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\BannerWorkflow;
+namespace WMDE\Fundraising\BannerToolkit;
 
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
@@ -10,7 +11,7 @@ class CliConfiguration implements ConfigurationInterface
 	public function getConfigTreeBuilder()
 	{
 		$treeBuilder = new TreeBuilder();
-		$rootNode = $treeBuilder->root('cli');
+		$rootNode = $treeBuilder->root( 'cli' );
 		$rootNode->children()
 			->scalarNode( 'api_url' )
 				->info( 'Mediawiki API URL' )

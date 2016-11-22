@@ -1,6 +1,6 @@
 <?php
 
-namespace WMDE\Fundraising\BannerWorkflow\Commands;
+namespace WMDE\Fundraising\BannerToolkit\Commands;
 
 use M1\Env\Parser;
 use Mediawiki\Api\ApiUser;
@@ -13,11 +13,11 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use WMDE\Fundraising\BannerWorkflow\CliConfiguration;
-use WMDE\Fundraising\BannerWorkflow\FileToPageNameTranslator;
-use WMDE\Fundraising\BannerWorkflow\PageUpload\PageUploadRequest;
-use WMDE\Fundraising\BannerWorkflow\PageUpload\PageUploadResponse;
-use WMDE\Fundraising\BannerWorkflow\PageUpload\PageUploadUseCase;
+use WMDE\Fundraising\BannerToolkit\CliConfiguration;
+use WMDE\Fundraising\BannerToolkit\FileToPageNameTranslator;
+use WMDE\Fundraising\BannerToolkit\PageUpload\PageUploadRequest;
+use WMDE\Fundraising\BannerToolkit\PageUpload\PageUploadResponse;
+use WMDE\Fundraising\BannerToolkit\PageUpload\PageUploadUseCase;
 
 class UploadCommand extends Command
 {
@@ -52,7 +52,7 @@ class UploadCommand extends Command
 		$useCase = $this->newUseCase( $config );
 		foreach ( glob( self::FILE_GLOB ) as $file ) {
 			$this->outputResponse(
-				$useCase->uploadIfChanged( $this->getRequestFromFilename( $file, $fileToPageMapper, $input->getOption( 'message') ?? '' ) ),
+				$useCase->uploadIfChanged( $this->getRequestFromFilename( $file, $fileToPageMapper, $input->getOption( 'message' ) ?? '' ) ),
 				$output
 			);
 		}
@@ -132,8 +132,8 @@ class UploadCommand extends Command
 			return [];
 		}
 		$values = [];
-		foreach( Parser::parse( file_get_contents( $name ) ) as $k => $v ) {
-			$values[strtolower($k)] = $v;
+		foreach ( Parser::parse( file_get_contents( $name ) ) as $k => $v ) {
+			$values[strtolower( $k )] = $v;
 		}
 		return $values;
 	}

@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\BannerWorkflow\Test;
+namespace WMDE\Fundraising\BannerToolkit\Test;
 
 use Mediawiki\Api\Service\PageGetter;
 use Mediawiki\Api\Service\RevisionSaver;
@@ -12,8 +12,8 @@ use Mediawiki\DataModel\Page;
 use Mediawiki\DataModel\PageIdentifier;
 use Mediawiki\DataModel\Revision;
 use Mediawiki\DataModel\Title;
-use WMDE\Fundraising\BannerWorkflow\PageUpload\PageUploadRequest;
-use WMDE\Fundraising\BannerWorkflow\PageUpload\PageUploadUseCase;
+use WMDE\Fundraising\BannerToolkit\PageUpload\PageUploadRequest;
+use WMDE\Fundraising\BannerToolkit\PageUpload\PageUploadUseCase;
 
 class PageUploadUseCaseTest extends \PHPUnit_Framework_TestCase
 {

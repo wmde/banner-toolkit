@@ -2,7 +2,7 @@
 <?php
 
 use Symfony\Component\Console\Application;
-use WMDE\Fundraising\BannerWorkflow\Commands\UploadCommand;
+use WMDE\Fundraising\BannerToolkit\Commands\UploadCommand;
 
 require __DIR__ . '/../vendor/autoload.php';
 

@@ -1,5 +1,5 @@
 {
-    "name": "wmde/bannerworkflow",
+    "name": "wmde/banner-toolkit",
     "description": "Command line tool for editing banner code locally",
     "license": "MIT",
     "authors": [
@@ -8,13 +8,14 @@
             "email": "gabriel.birke@wikimedia.de"
         }
     ],
-    "bin": [ "bin/banner_workflow" ],
+    "bin": [ "bin/banner-toolkit" ],
     "autoload": {
         "psr-4": {
-            "WMDE\\Fundraising\\BannerWorkflow\\": "src/"
+            "WMDE\\Fundraising\\BannerToolkit\\": "src/"
         }
     },
     "require": {
+        "php":"~7.0",
         "addwiki/mediawiki-api": "~0.5.0",
         "symfony/console": "^3.1",
         "symfony/config": "^3.1",

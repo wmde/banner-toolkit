@@ -1,9 +1,9 @@
 <?php
+declare( strict_types = 1 );
 
+namespace WMDE\Fundraising\BannerToolkit\Test;
 
-namespace WMDE\Fundraising\BannerWorkflow\Test;
-
-use WMDE\Fundraising\BannerWorkflow\FileToPageNameTranslator;
+use WMDE\Fundraising\BannerToolkit\FileToPageNameTranslator;
 
 class FileToPageNameTranslatorTest extends \PHPUnit_Framework_TestCase
 {

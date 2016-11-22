@@ -1,12 +1,12 @@
-# WMDE banner uploader
+# WMDE Banner Toolkit
 
-This command line tool is for uploading campaign banners to a wiki.
+This command line tool is managing fundraising campaign banners on a wiki.
   
 ## Installation
   
 Install the command line tool as a global command  
   
-    composer install -g wmde/bannerworkflow
+    composer install -g wmde/banner-toolkit
     
 ## Usage
 
@@ -32,13 +32,13 @@ Create banner HTML files named after variants, e.g. `Banner_ctrl.html` and `Bann
 
 Call the command like this (changing the placeholders):
   
-    banner_workflow upload <TEST_NAME>
+    banner-toolkit upload <TEST_NAME>
     
 The command will then look for HTML files matching the `Banner_<VARIANT>.html` pattern and copy the file contents to the corresponding page. The command figures out the page name by combining the page prefix and campaign name from the configuration, the test name and the variant parts in the file names.
 
 If you want to have an edit comment for the banners, use the `-m` Parameter:
  
-    banner_workflow upload -m "banner redesign" <TEST_NAME>
+    banner-toolkit upload -m "banner redesign" <TEST_NAME>
     
 ### Automatic upload
 
