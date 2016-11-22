@@ -7,6 +7,7 @@ namespace WMDE\Fundraising\BannerWorkflow\Test;
 use Mediawiki\Api\Service\PageGetter;
 use Mediawiki\Api\Service\RevisionSaver;
 use Mediawiki\DataModel\Content;
+use Mediawiki\DataModel\EditInfo;
 use Mediawiki\DataModel\Page;
 use Mediawiki\DataModel\PageIdentifier;
 use Mediawiki\DataModel\Revision;
@@ -91,4 +92,26 @@ class PageUploadUseCaseTest extends \PHPUnit_Framework_TestCase
 		$this->assertFalse( $useCase->uploadIfChanged( $this->newRequest() )->contentHasChanged() );
 		$this->assertFalse( $useCase->uploadIfChanged( $this->newRequest() )->isSuccess() );
 	}
+
+	public function testGivenRequestWithEditMessage_editMessageIsUsed() {
+		$getter = $this->getMockBuilder( PageGetter::class )->disableOriginalConstructor()->getMock();
+		$saver = $this->getMockBuilder( RevisionSaver::class )->disableOriginalConstructor()->getMock();
+		$expectedEditInfo = new EditInfo( 'Some changes' );
+		$saver->expects( $this->once() )
+			->method( 'save' )
+			->with( $this->anything(), $expectedEditInfo )
+			->willReturn( true );
+		$useCase = new PageUploadUseCase( $getter, $saver );
+		$getter->method( 'getFromTitle' )
+			->willReturn( $this->createPageWithDate( ( new \DateTime( self::LAST_CHANGE_TIMESTAMP ) )->modify( '-10 minutes' ) ) );
+
+		$request = new PageUploadRequest(
+			self::BANNER_NAME,
+			new \DateTime( self::LAST_CHANGE_TIMESTAMP ),
+			'New Banner',
+			'Some changes'
+		);
+		$this->assertTrue( $useCase->uploadIfChanged( $request )->contentHasChanged() );
+	}
+
 }

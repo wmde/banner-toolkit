@@ -36,6 +36,14 @@ Call the command like this (changing the placeholders):
     
 The command will then look for HTML files matching the `Banner_<VARIANT>.html` pattern and copy the file contents to the corresponding page. The command figures out the page name by combining the page prefix and campaign name from the configuration, the test name and the variant parts in the file names.
 
+If you want to have an edit comment for the banners, use the `-m` Parameter:
+ 
+    banner_workflow upload -m "banner redesign" <TEST_NAME>
+    
+### Automatic upload
+
+**TODO:** Describe how to integrate with Git commit hooks or automatic upload on saving in the editor, with [Watchman](https://facebook.github.io/watchman/).
+
 ## Why use this tool instead of CentralNotice editor?
 
 On CentralNotice you only have a textarea for entering banner code. That means you lose focus when you save, have no line numbers and syntax highlighting, no indentation tools except your spacebar.

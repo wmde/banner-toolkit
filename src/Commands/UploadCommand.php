@@ -35,6 +35,7 @@ class UploadCommand extends Command
 			->addOption( 'page_prefix', 'w', InputOption::VALUE_REQUIRED, 'Namespace and page prefix on wiki' )
 			->addOption( 'campaign_name', 'c', InputOption::VALUE_REQUIRED, 'Campaign prefix, e.g. B16WMDE_' )
 			->addOption( 'config_file', null, InputOption::VALUE_REQUIRED, 'Config file for all options', '.campaign_config' )
+			->addOption( 'message', 'm', InputOption::VALUE_REQUIRED, 'Edit message for the wiki' )
 			->addArgument( 'test_name', InputArgument::REQUIRED, 'Test name (without campaign prefix), e.g. 20_161224' );
 	}
 
@@ -51,7 +52,7 @@ class UploadCommand extends Command
 		$useCase = $this->newUseCase( $config );
 		foreach ( glob( self::FILE_GLOB ) as $file ) {
 			$this->outputResponse(
-				$useCase->uploadIfChanged( $this->getRequestFromFilename( $file, $fileToPageMapper ) ),
+				$useCase->uploadIfChanged( $this->getRequestFromFilename( $file, $fileToPageMapper, $input->getOption( 'message') ?? '' ) ),
 				$output
 			);
 		}
@@ -74,12 +75,14 @@ class UploadCommand extends Command
 		return new FileToPageNameTranslator( self::FILE_PATTERN_REGEX, self::BANNER_PAGE_NAME_TEMPLATE, $context );
 	}
 
-	private function getRequestFromFilename( string $file, FileToPageNameTranslator $fileToPageMapper ): PageUploadRequest
+	private function getRequestFromFilename( string $file, FileToPageNameTranslator $fileToPageMapper,
+											 string $editMessage ): PageUploadRequest
 	{
 		return new PageUploadRequest(
 			$fileToPageMapper->getPageName( $file ),
 			new \DateTime( '@' . filemtime( $file ) ),
-			file_get_contents( $file )
+			file_get_contents( $file ),
+			$editMessage
 		);
 	}
 

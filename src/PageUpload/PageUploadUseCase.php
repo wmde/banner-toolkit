@@ -7,6 +7,7 @@ namespace WMDE\Fundraising\BannerWorkflow\PageUpload;
 use Mediawiki\Api\Service\PageGetter;
 use Mediawiki\Api\Service\RevisionSaver;
 use Mediawiki\DataModel\Content;
+use Mediawiki\DataModel\EditInfo;
 use Mediawiki\DataModel\Revision;
 
 class PageUploadUseCase {
@@ -37,10 +38,20 @@ class PageUploadUseCase {
 		$content = new Content( $request->getNewContent() );
 		$newRevision = new Revision( $content, $page->getPageIdentifier() );
 
-		// TODO Add edit comment to PageUploadRequest, create EditInfo object here
-		if ( $this->revisionSaver->save( $newRevision ) ) {
+		if ( $this->revisionSaver->save( $newRevision, $this->getEditInfo( $request ) ) ) {
 			return PageUploadResponse::newSuccessResponse( sprintf( "Content was uploaded to '%s'", $request->getPageName() ) );
 		}
 		return PageUploadResponse::newFailureResponse( 'Content upload failed' );
+	}
+
+	/**
+	 * @param PageUploadRequest $request
+	 * @return EditInfo|null
+	 */
+	private function getEditInfo( PageUploadRequest $request ) {
+		if ( $request->getEditMessage() ) {
+			return new EditInfo( $request->getEditMessage() );
+		}
+		return null;
 	}
 }
